@@ -1,5 +1,7 @@
 github.com/cespare/xxhash/v2 v2.3.0 h1:UL815xU9SqsFlibzuggzjXhog7bL6oX9BbNZnL2UFvs=
 github.com/cespare/xxhash/v2 v2.3.0/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
+github.com/ebairamo/digital-capsule-contracts-go v0.0.0-20260819210458-1b0fe4c034af h1:JhjfuH36vA7BtBgpaIVbTei1FNyMB7ZbtIJPYTGwHjQ=
+github.com/ebairamo/digital-capsule-contracts-go v0.0.0-20260819210458-1b0fe4c034af/go.mod h1:8ho75ErOvA6pKvWFiwS9WqRvv48N1b/AE/cQYOMYQF4=
 github.com/go-logr/logr v1.4.3 h1:CjnDlHq8ikf6E492q6eKboGOC0T8CDaOvkHCIg8idEI=
 github.com/go-logr/logr v1.4.3/go.mod h1:9T104GzyrTigFIr8wt5mBrctHMim0Nb2HLGrmQ40KvY=
 github.com/go-logr/stdr v1.2.2 h1:hSWxHoqTgW2S2qGc0LTAI563KZ5YKYRhT3MFKZMbjag=
