@@ -4,8 +4,9 @@ import (
 	"context"
 	"errors"
 
-	"github.com/ebairamo/capsule-service/internal/domain"
-	"github.com/ebairamo/capsule-service/internal/service"
+	"capsule_service/internal/domain"
+	service "capsule_service/internal/usecase"
+
 	capsulev1 "github.com/ebairamo/digital-capsule-contracts-go/gen/go/capsule/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
