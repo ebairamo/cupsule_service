@@ -24,6 +24,53 @@ func NewHandler(capsuleService *service.CapsuleService) *Handler {
 	}
 }
 
+func (h *Handler) CreateCapsule(ctx context.Context, req *capsulev1.CreateCapsuleRequest) (*capsulev1.Capsule, error) {
+	if req.GetOwnerId() == "" {
+		return nil, status.Error(codes.InvalidArgument, "id is required")
+	}
+	if req.GetMessage() == "" {
+		return nil, status.Error(codes.InvalidArgument, "id is required")
+	}
+	//ДОДЕЛАТЬ ОСТАЛЬНЫЕ
+
+	if req.GetOpenAt() == nil {
+		return nil, status.Error(codes.InvalidArgument, "")
+	}
+	if err := req.GetOpenAt().CheckValid(); err != nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid open At")
+	}
+	visibility, err := visibilityFromProto(req.GetVisibility())
+	if err != nil {
+		return nil, nil
+	}
+	cupsule, err := h.capsuleService.CreateCapsule(ctx, req.GetOwnerId(), req.GetTitle(), req.GetMessage(), visibility, req.GetOpenAt().AsTime())
+	if err != nil {
+		return nil, nil
+	}
+	return cupsule, nil
+}
+
+func visibilityFromProto(value capsulev1.Visibility) (domain.Visibility, error) {
+	switch value {
+	case capsulev1.Visibility_VISIBILITY_PRIVATE:
+		return domain.VisibilityPrivate, nil
+		//дописать
+	default:
+		return "", errors.New("dsfsfd")
+	}
+
+}
+
+func capsuleFromProto(value capsulev1.Visibility) (domain.Visibility, error) {
+	switch value {
+	case capsulev1.Visibility_VISIBILITY_PRIVATE:
+		return domain.VisibilityPrivate, nil
+		//дописать
+	default:
+		return "", errors.New("dsfsfd")
+	}
+
+}
 func (h *Handler) GetCapsule(
 	ctx context.Context,
 	req *capsulev1.GetCapsuleRequest,

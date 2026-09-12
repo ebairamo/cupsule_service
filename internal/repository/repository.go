@@ -11,4 +11,6 @@ type CapsuleRepository interface {
 	List(ctx context.Context, ownerID string) ([]*domain.Cupsule, error)
 	Update(ctx context.Context, capsule *domain.Cupsule) error
 	Delete(ctx context.Context, id string) error
+	Seal(ctx context.Context, id string) error
+	Open(ctx context.Context, id string) error
 }

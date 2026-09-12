@@ -107,3 +107,39 @@ func (r *PostgresRepository) Delete(ctx context.Context, id string) error {
 	}
 	return nil
 }
+func (r *PostgresRepository) Seal(ctx context.Context, id string) error {
+	query := `
+	UPDATE cupsule
+	SET 
+		status = $1
+	WHERE id = $2
+	`
+	_, err := r.db.ExecContext(
+		ctx,
+		query,
+		domain.StatusSealed,
+		id,
+	)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (r *PostgresRepository) Open(ctx context.Context, id string) error {
+	query := `
+	UPDATE cupsule
+	SET 
+		status = $1
+	WHERE id = $2
+	
+	`
+	_, err := r.db.ExecContext(
+		ctx,
+		query,
+		domain.StatusOpened,
+		id)
+	if err != nil {
+		return err
+	}
+	return nil
+}

@@ -78,15 +78,52 @@ func main() {
 	fmt.Printf("Обновлено! Новый Title: %s\n", updated.Title)
 
 	// --- STEP 5: DELETE ---
-	fmt.Println("\n--- 5. Удаление капсулы ---")
+	fmt.Println("\n--- 5. Удаление первой капсулы ---")
 	if err := repo.Delete(ctx, fetched.ID); err != nil {
 		log.Fatalf("Ошибка удаления: %v", err)
 	}
 	fmt.Println("Капсула успешно удалена!")
 
-	// Проверяем, что действительно удалилась
-	_, err = capsuleSvc.GetByID(ctx, fetched.ID)
+	// --- STEP 6: SEAL (Запечатывание) ---
+	fmt.Println("\n--- 6. Создание и запечатывание новой капсулы ---")
+	targetCapsule, err := capsuleSvc.CreateCapsule(
+		ctx,
+		ownerID,
+		"Капсула для проверки Seal и Open",
+		"Секретный текст",
+		domain.VisibilityPrivate,
+		time.Now().Add(1*time.Hour), // Валидное время в будущем
+	)
 	if err != nil {
-		fmt.Println("Проверка успешна: капсула больше не найдена в БД.")
+		log.Fatalf("Ошибка создания капсулы для теста: %v", err)
 	}
+
+	if err := capsuleSvc.Seal(ctx, targetCapsule.ID); err != nil {
+		log.Fatalf("Ошибка при запечатывании: %v", err)
+	}
+
+	sealedCapsule, err := capsuleSvc.GetByID(ctx, targetCapsule.ID)
+	if err != nil {
+		log.Fatalf("Ошибка получения капсулы после Seal: %v", err)
+	}
+	fmt.Printf("Успешно! Капсула %s запечатана. Статус: %v\n", sealedCapsule.ID, sealedCapsule.Status)
+
+	// --- STEP 7: OPEN (Открытие) ---
+	fmt.Println("\n--- 7. Открытие запечатанной капсулы ---")
+
+	// Временно сдвигаем open_at в прошлую дату через SQL, чтобы заставить time.Now().After(openAt) пройти
+	_, err = db.ExecContext(ctx, "UPDATE cupsule SET open_at = $1 WHERE id = $2", time.Now().Add(-1*time.Hour), targetCapsule.ID)
+	if err != nil {
+		log.Fatalf("Ошибка сдвига времени в БД: %v", err)
+	}
+
+	if err := capsuleSvc.Open(ctx, targetCapsule.ID); err != nil {
+		log.Fatalf("Ошибка при открытии капсулы: %v", err)
+	}
+
+	openedCapsule, err := capsuleSvc.GetByID(ctx, targetCapsule.ID)
+	if err != nil {
+		log.Fatalf("Ошибка получения капсулы после Open: %v", err)
+	}
+	fmt.Printf("Успешно! Капсула %s открыта. Итоговый статус: %v\n", openedCapsule.ID, openedCapsule.Status)
 }

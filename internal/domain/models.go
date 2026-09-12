@@ -11,6 +11,8 @@ var (
 	ErrInvalidOpenAt        = errors.New("open_at time cannot be in the past")
 	ErrCapsuleAlreadySealed = errors.New("capsule is already sealed")
 	ErrValueEmpty           = errors.New("value cannot be empty")
+	ErrNotEditable          = errors.New("cupsule not Editable")
+	ErrIsNotSealed          = errors.New("capsule is not sealed")
 )
 
 type Cupsule struct {
